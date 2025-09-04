@@ -6,3 +6,4 @@ export const LOGOUT_URL: string = API_BASE_URL + "/logout";
 export const PROFILE_URL: string = API_BASE_URL + "/profile";
 export const MAP_URL: string = API_BASE_URL + "/map";
 export const WORKFLOW_URL: string = API_BASE_URL + "/workflow";
+export const SCHEDULE_URL: string = API_BASE_URL + "/schedule";

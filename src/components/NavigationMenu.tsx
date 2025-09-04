@@ -50,6 +50,16 @@ export function NavigationMenu({...props}: React.ComponentProps<typeof Sidebar>)
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
                         </SidebarMenu>
+                        <SidebarMenu>
+                            <SidebarMenuItem key="schedule">
+                                <SidebarMenuButton tooltip="Schedule" asChild>
+                                    <Link href="/schedule">
+                                        <IconAutomation/>
+                                        <span>Schedule</span>
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        </SidebarMenu>
                         <Collapsible className="group/collapsible">
                             <CollapsibleTrigger asChild>
                                 <SidebarMenuButton>
