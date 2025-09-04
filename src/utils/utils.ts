@@ -1,6 +1,7 @@
-import type {NextRequest} from "next/server";
+import {NextRequest, NextResponse} from "next/server";
 import {RequestInternal} from "next-auth";
 import type {ReadonlyHeaders} from "next/dist/server/web/spec-extension/adapters/headers";
+import {ApiErrorResponse} from "@/interfaces/api_response";
 
 export const getIPFromRequestHeaders = (req: Pick<RequestInternal, "body" | "query" | "headers" | "method">) => {
     const headers = req?.headers;
@@ -56,3 +57,20 @@ export const getIPFromRequest = (req: NextRequest) => {
 
     return "127.0.0.1";
 };
+
+const serverError: ApiErrorResponse = {status: -1, message: "Server Error"}
+export const commonErrorResponse = async (response: Response): Promise<NextResponse<ApiErrorResponse> | null> => {
+    if (!response.ok) {
+        try {
+            const data = await response.json() as ApiErrorResponse;
+            if(data && data.status && data.message) {
+                return NextResponse.json(data, {status: response.status});
+            } else {
+                return NextResponse.json(serverError, {status: response.status})
+            }
+        } catch {
+            return NextResponse.json(serverError, {status: response.status})
+        }
+    }
+    return null;
+}
