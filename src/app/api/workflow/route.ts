@@ -3,6 +3,7 @@ import {WorkflowListResponse} from "@/interfaces/workflow";
 import {getToken} from "next-auth/jwt";
 import {WORKFLOW_URL} from "@/utils/api_consts";
 import {ApiErrorResponse} from "@/interfaces/api_response";
+import {commonErrorResponse} from "@/utils/utils";
 
 const origin = process.env.NEXTAUTH_URL!;
 const serverError: ApiErrorResponse = {status: -1, message: "Server Error"}
@@ -31,18 +32,8 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
             }
         );
 
-        if (!response.ok) {
-            try {
-                const data = await response.json() as ApiErrorResponse;
-                if(data && data.status && data.message) {
-                    return NextResponse.json(data, {status: 500});
-                } else {
-                    return NextResponse.json(serverError, {status: 500})
-                }
-            } catch {
-                return NextResponse.json(serverError, {status: 500})
-            }
-        }
+        const errorResponse = await commonErrorResponse(response);
+        if (errorResponse) return errorResponse;
 
         const data = await response.json() as WorkflowListResponse;
         return NextResponse.json(data);
@@ -80,18 +71,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
             }
         );
 
-        if (!response.ok) {
-            try {
-                const data = await response.json() as ApiErrorResponse;
-                if(data && data.status && data.message) {
-                    return NextResponse.json(data, {status: 500});
-                } else {
-                    return NextResponse.json(serverError, {status: 500})
-                }
-            } catch {
-                return NextResponse.json(serverError, {status: 500})
-            }
-        }
+        const errorResponse = await commonErrorResponse(response);
+        if (errorResponse) return errorResponse;
 
         const result = await response.json() as WorkflowListResponse;
         return NextResponse.json(result);

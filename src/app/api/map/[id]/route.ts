@@ -3,6 +3,7 @@ import {ApiErrorResponse} from "@/interfaces/api_response";
 import {getToken} from "next-auth/jwt";
 import {MAP_URL} from "@/utils/api_consts";
 import {MapResponse} from "@/interfaces/waypoint";
+import {commonErrorResponse} from "@/utils/utils";
 
 const origin = process.env.NEXTAUTH_URL!;
 const serverError: ApiErrorResponse = {status: -1, message: "Server Error"}
@@ -36,18 +37,8 @@ export async function GET(req: NextRequest, context: Context): Promise<NextRespo
             }
         );
 
-        if (!response.ok) {
-            try {
-                const data = await response.json() as ApiErrorResponse;
-                if(data && data.status && data.message) {
-                    return NextResponse.json(data, {status: 500});
-                } else {
-                    return NextResponse.json(serverError, {status: 500})
-                }
-            } catch {
-                return NextResponse.json(serverError, {status: 500})
-            }
-        }
+        const errorResponse = await commonErrorResponse(response);
+        if (errorResponse) return errorResponse;
 
         const data = await response.json() as MapResponse;
         return NextResponse.json(data);
