@@ -1,0 +1,8 @@
+export const API_BASE_URL: string = process.env.API_BASE_URL!;
+export const REFRESH_TOKEN_URL: string = API_BASE_URL + "/refresh";
+export const USER_URL: string = API_BASE_URL + "/user";
+export const LOGIN_URL: string = API_BASE_URL + "/login";
+export const LOGOUT_URL: string = API_BASE_URL + "/logout";
+export const PROFILE_URL: string = API_BASE_URL + "/profile";
+export const MAP_URL: string = API_BASE_URL + "/map";
+export const WORKFLOW_URL: string = API_BASE_URL + "/workflow";
