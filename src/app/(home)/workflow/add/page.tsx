@@ -423,7 +423,7 @@ const App: React.FC = () => {
                                 Clear Selection
                             </Button>
                             <Button onClick={toggleMode} variant="secondary"
-                                    className="hover:bg-gray-700 hover:text-white">
+                                    className="hover:bg-gray-700 hover:text-white hidden">
                                 Switch to {isMapMode ? 'Simple Mode' : 'Map Mode'}
                             </Button>
                         </div>
