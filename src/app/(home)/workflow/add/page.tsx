@@ -214,6 +214,10 @@ const App: React.FC = () => {
             toast.error('Please select at least one node.');
             return;
         }
+        if (name === '' || name.length > 20) {
+            toast.error('Job name must be between 1 and 20 characters.');
+            return;
+        }
 
         setIsSubmitting(true);
         try {
@@ -298,14 +302,14 @@ const App: React.FC = () => {
                                     <DialogHeader>
                                         <DialogTitle>Save New Job</DialogTitle>
                                         <DialogDescription>
-                                            Enter a name and description for this job. Both are optional.
+                                            Enter a name and description for this job. Description is optional.
                                         </DialogDescription>
                                     </DialogHeader>
                                     <div className="space-y-4 py-2 pb-4">
                                         <div className="space-y-2">
-                                            <Label htmlFor="job-name">Job Name (Optional)</Label>
+                                            <Label htmlFor="job-name">Name</Label>
                                             <Input id="job-name" disabled={isSubmitting} value={name}
-                                                   onChange={(e) => setName(e.target.value)}/>
+                                                   onChange={(e) => setName(e.target.value)} required/>
                                         </div>
                                         <div className="space-y-2">
                                             <Label htmlFor="job-description">Description (Optional)</Label>
