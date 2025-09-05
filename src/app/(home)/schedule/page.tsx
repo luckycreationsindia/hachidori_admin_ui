@@ -39,13 +39,20 @@ import {
     ScheduleResponse
 } from "@/interfaces/schedule";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
+import {useHeaderTitle} from "@/context/HeaderTitleContext";
 
 const SchedulePage = () => {
+    const {setTitle} = useHeaderTitle();
     const [loading, setLoading] = useState<boolean>(true);
     const [schedules, setSchedules] = useState<Schedule[]>([]);
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [workflows, setWorkflows] = useState<Workflow[]>([]);
+
+    useEffect(() => {
+        setTitle("Schedules");
+        return () => setTitle(process.env.NEXT_PUBLIC_APP_NAME || "");
+    }, [setTitle])
 
     const form = useForm<CreateScheduleFormValues>({
         resolver: zodResolver(createScheduleSchema),

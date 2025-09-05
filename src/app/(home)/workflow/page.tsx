@@ -13,13 +13,20 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {useHeaderTitle} from "@/context/HeaderTitleContext";
 
 const WorkflowPage = () => {
+    const {setTitle} = useHeaderTitle();
     const [loading, setLoading] = useState<boolean>(true);
     const [workflows, setWorkflows] = useState<Workflow[]>([]);
     const [isDeleting, setIsDeleting] = useState<boolean>(false);
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
     const [workflowToDelete, setWorkflowToDelete] = useState<number | null>(null);
+
+    useEffect(() => {
+        setTitle("Workflows");
+        return () => setTitle(process.env.NEXT_PUBLIC_APP_NAME || "");
+    }, [setTitle])
 
     const fetchWorkflows = async () => {
         setLoading(true);

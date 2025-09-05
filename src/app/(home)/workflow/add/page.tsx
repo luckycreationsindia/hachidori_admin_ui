@@ -18,167 +18,32 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger
 } from '@/components/ui/dialog';
 import {Input} from '@/components/ui/input';
-
-// Hardcoded data from the provided JSON files for demonstration
-// const mapData: MapData = {
-//     "Header": [
-//         {
-//             "Record_Time_Stamp": "2025-09-02 14:20:12",
-//             "location_Detail": "map1",
-//             "Num_of_Nodes": 33,
-//             "Layout_X": 100000,
-//             "Layout_Y": 120000,
-//             "Offset_X": -10000,
-//             "Offset_Y": -45000,
-//             "beaconNetworkID": "E5CE"
-//         }
-//     ],
-//     "NodeDetails": [
-//         {"Node_ID": 0, "NodeName": "LOADING", "Node_X": -3200, "Node_Y": 75700, "IsDestn": 1, "SpecialNode": 0},
-//         {"Node_ID": 1, "NodeName": "J1", "Node_X": -3100, "Node_Y": 75700, "IsDestn": 1, "SpecialNode": 0},
-//         {"Node_ID": 2, "NodeName": "N2", "Node_X": -3100, "Node_Y": 75700, "IsDestn": 0, "SpecialNode": 0},
-//         {"Node_ID": 3, "NodeName": "N3", "Node_X": 2000, "Node_Y": 73200, "IsDestn": 0, "SpecialNode": 0},
-//         {"Node_ID": 4, "NodeName": "N4", "Node_X": 2100, "Node_Y": 60000, "IsDestn": 0, "SpecialNode": 0},
-//         {"Node_ID": 5, "NodeName": "J2", "Node_X": 2000, "Node_Y": 20000, "IsDestn": 1, "SpecialNode": 0},
-//         {"Node_ID": 6, "NodeName": "N6", "Node_X": 2000, "Node_Y": 3860, "IsDestn": 0, "SpecialNode": 0},
-//         {"Node_ID": 7, "NodeName": "N7", "Node_X": 15000, "Node_Y": 2360, "IsDestn": 0, "SpecialNode": 0},
-//         {"Node_ID": 8, "NodeName": "H-M1", "Node_X": 33895, "Node_Y": 2360, "IsDestn": 1, "SpecialNode": 0},
-//         {"Node_ID": 9, "NodeName": "H-M2", "Node_X": 41674, "Node_Y": 2360, "IsDestn": 1, "SpecialNode": 0},
-//         {"Node_ID": 10, "NodeName": "H-M3", "Node_X": 53892, "Node_Y": 2360, "IsDestn": 1, "SpecialNode": 0},
-//         {"Node_ID": 11, "NodeName": "H-M4", "Node_X": 59400, "Node_Y": 2360, "IsDestn": 1, "SpecialNode": 0},
-//         {"Node_ID": 12, "NodeName": "N12", "Node_X": 60000, "Node_Y": 2360, "IsDestn": 0, "SpecialNode": 0},
-//         {"Node_ID": 13, "NodeName": "N13", "Node_X": 60000, "Node_Y": 2360, "IsDestn": 0, "SpecialNode": 0},
-//         {"Node_ID": 14, "NodeName": "Home", "Node_X": 58000, "Node_Y": 2360, "IsDestn": 1, "SpecialNode": 1},
-//         {"Node_ID": 15, "NodeName": "H-E4", "Node_X": 51917, "Node_Y": 2360, "IsDestn": 1, "SpecialNode": 0},
-//         {"Node_ID": 16, "NodeName": "H-E3", "Node_X": 44674, "Node_Y": 2360, "IsDestn": 1, "SpecialNode": 0},
-//         {"Node_ID": 17, "NodeName": "H-E2", "Node_X": 33400, "Node_Y": 2360, "IsDestn": 1, "SpecialNode": 0},
-//         {"Node_ID": 18, "NodeName": "H-E1", "Node_X": 31000, "Node_Y": 2360, "IsDestn": 1, "SpecialNode": 0},
-//         {"Node_ID": 19, "NodeName": "S-1", "Node_X": 21418, "Node_Y": 2360, "IsDestn": 1, "SpecialNode": 0},
-//         {"Node_ID": 20, "NodeName": "S-2", "Node_X": 15579, "Node_Y": 2360, "IsDestn": 1, "SpecialNode": 0},
-//         {"Node_ID": 21, "NodeName": "S-3", "Node_X": 10795, "Node_Y": 2360, "IsDestn": 1, "SpecialNode": 0},
-//         {"Node_ID": 22, "NodeName": "S-4", "Node_X": 2000, "Node_Y": 7000, "IsDestn": 1, "SpecialNode": 0},
-//         {"Node_ID": 23, "NodeName": "N23", "Node_X": 2000, "Node_Y": 2360, "IsDestn": 0, "SpecialNode": 0},
-//         {"Node_ID": 24, "NodeName": "J3", "Node_X": 2000, "Node_Y": 12000, "IsDestn": 1, "SpecialNode": 0},
-//         {"Node_ID": 25, "NodeName": "N25", "Node_X": 2000, "Node_Y": 37000, "IsDestn": 0, "SpecialNode": 0},
-//         {"Node_ID": 26, "NodeName": "J4", "Node_X": 2000, "Node_Y": 69600, "IsDestn": 1, "SpecialNode": 0},
-//         {"Node_ID": 27, "NodeName": "N27", "Node_X": 2000, "Node_Y": 73400, "IsDestn": 0, "SpecialNode": 0},
-//         {"Node_ID": 28, "NodeName": "N28", "Node_X": -4000, "Node_Y": 75550, "IsDestn": 0, "SpecialNode": 0},
-//         {"Node_ID": 29, "NodeName": "UNLOADING", "Node_X": -12000, "Node_Y": 75700, "IsDestn": 1, "SpecialNode": 0},
-//         {"Node_ID": 30, "NodeName": "N31", "Node_X": -14000, "Node_Y": 75700, "IsDestn": 0, "SpecialNode": 0},
-//         {"Node_ID": 31, "NodeName": "N32", "Node_X": -14000, "Node_Y": 75700, "IsDestn": 0, "SpecialNode": 0},
-//         {"Node_ID": 32, "NodeName": "N33", "Node_X": 7000, "Node_Y": 2260, "IsDestn": 0, "SpecialNode": 0}
-//     ],
-//     "RouteMap": []
-// };
-//
-// // Hardcoded workflow data from map1_active (1).json
-// const workflowData: Workflow[] = [
-//     {
-//         "workflowID": 1, "workflowName": "Master", "mapName": "map1", "workflowType": "HT", "commands": [
-//             {"command": "navigate", "args": {"destination": 14, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 15, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 16, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 17, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 18, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 19, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 20, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 21, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 22, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 24, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 26, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 29, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 0, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 5, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 8, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 9, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 10, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 11, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 14, "visibility": true}}
-//         ]
-//     },
-//     {
-//         "workflowID": 2, "workflowName": "H1 - Diff_Ring", "mapName": "map1", "workflowType": "HT", "commands": [
-//             {"command": "navigate", "args": {"destination": 14, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 19, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 24, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 26, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 29, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 0, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 5, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 8, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 14, "visibility": true}}
-//         ]
-//     },
-//     {
-//         "workflowID": 3, "workflowName": "H2 - PDD", "mapName": "map1", "workflowType": "HT", "commands": [
-//             {"command": "navigate", "args": {"destination": 14, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 17, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 20, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 24, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 26, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 29, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 0, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 5, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 9, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 14, "visibility": true}}
-//         ]
-//     },
-//     {
-//         "workflowID": 4, "workflowName": "H3 - Driven", "mapName": "map1", "workflowType": "HT", "commands": [
-//             {"command": "navigate", "args": {"destination": 14, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 16, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 21, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 24, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 26, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 29, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 0, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 5, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 10, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 14, "visibility": true}}
-//         ]
-//     },
-//     {
-//         "workflowID": 5, "workflowName": "H4 - GC_Drive", "mapName": "map1", "workflowType": "HT", "commands": [
-//             {"command": "navigate", "args": {"destination": 14, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 15, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 22, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 24, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 26, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 29, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 0, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 5, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 11, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 14, "visibility": true}}
-//         ]
-//     },
-//     {
-//         "workflowID": 6, "workflowName": "testing", "mapName": "map1", "workflowType": "HDC", "commands": [
-//             {"command": "navigate", "args": {"destination": 7, "visibility": true}},
-//             {"command": "navigate", "args": {"destination": 13, "visibility": true}}
-//         ]
-//     },
-// ];
+import {useHeaderTitle} from "@/context/HeaderTitleContext";
 
 const App: React.FC = () => {
+    const {setTitle} = useHeaderTitle();
     const [selectedNodes, setSelectedNodes] = useState<NodeDetail[]>([]);
     const [isMapMode, setIsMapMode] = useState<boolean>(false);
     const [selectedWorkflowId, setSelectedWorkflowId] = useState<number | null>(null);
     const [workflowData, setWorkflowData] = useState<Workflow[]>([]);
     const [mapData, setMapData] = useState<MapData>();
     const [loading, setLoading] = useState<boolean>(false);
-
     const [scaleFactor, setScaleFactor] = useState<number>(150);
     const [mapOffset, setMapOffset] = useState<{ x: number; y: number }>({x: -20000, y: -50000});
     const [isDragging, setIsDragging] = useState<boolean>(false);
     const [startDragPos, setStartDragPos] = useState<{ x: number; y: number }>({x: 0, y: 0});
     const mapRef = useRef<HTMLDivElement>(null);
-    const [title, setTitle] = useState<string>('');
+    const [name, setName] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+    useEffect(() => {
+        setTitle("Add Workflow");
+        return () => setTitle(process.env.NEXT_PUBLIC_APP_NAME || "");
+    }, [setTitle])
 
     const minScaleFactor: number = 200;
     const maxScaleFactor: number = 50;
@@ -335,7 +200,7 @@ const App: React.FC = () => {
             return;
         }
 
-        setTitle('');
+        setName('');
         setDescription('');
         setIsDialogOpen(true);
     };
@@ -354,7 +219,7 @@ const App: React.FC = () => {
         try {
             const waypoints: string = selectedNodes.map((node: NodeDetail) => node.Node_ID.toString().padStart(4, '0')).join('');
             const newJobId: string = `JD${selectedWorkflowId}S${selectedNodes.length}S${waypoints}`;
-            const data = {title, description, data: newJobId}
+            const data = {name, description, data: newJobId}
 
             const response = await fetch('/api/workflow', {
                 method: 'POST',
@@ -371,7 +236,7 @@ const App: React.FC = () => {
                 toast.success('Workflow saved successfully!');
                 setIsDialogOpen(false);
                 setSelectedNodes([]);
-                setTitle('');
+                setName('');
                 setDescription('');
             }
         } catch (error) {
@@ -439,8 +304,8 @@ const App: React.FC = () => {
                                     <div className="space-y-4 py-2 pb-4">
                                         <div className="space-y-2">
                                             <Label htmlFor="job-name">Job Name (Optional)</Label>
-                                            <Input id="job-name" disabled={isSubmitting} value={title}
-                                                   onChange={(e) => setTitle(e.target.value)}/>
+                                            <Input id="job-name" disabled={isSubmitting} value={name}
+                                                   onChange={(e) => setName(e.target.value)}/>
                                         </div>
                                         <div className="space-y-2">
                                             <Label htmlFor="job-description">Description (Optional)</Label>
