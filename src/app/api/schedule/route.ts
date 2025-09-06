@@ -5,7 +5,6 @@ import {SCHEDULE_URL} from "@/utils/api_consts";
 import {ApiErrorResponse} from "@/interfaces/api_response";
 import {commonErrorResponse, getCommonHeaders} from "@/utils/utils";
 
-const origin = process.env.NEXTAUTH_URL!;
 const serverError: ApiErrorResponse = {status: -1, message: "Server Error"}
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
