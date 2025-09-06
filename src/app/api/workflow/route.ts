@@ -3,9 +3,8 @@ import {WorkflowListResponse} from "@/interfaces/workflow";
 import {getToken} from "next-auth/jwt";
 import {WORKFLOW_URL} from "@/utils/api_consts";
 import {ApiErrorResponse} from "@/interfaces/api_response";
-import {commonErrorResponse} from "@/utils/utils";
+import {commonErrorResponse, getCommonHeaders} from "@/utils/utils";
 
-const origin = process.env.NEXTAUTH_URL!;
 const serverError: ApiErrorResponse = {status: -1, message: "Server Error"}
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
@@ -21,14 +20,15 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     const cookieHeader = token.cookies;
 
     try {
+        const headers = getCommonHeaders(req, cookieHeader!);
+        const queryString = req.nextUrl.searchParams.toString();
+        const url = queryString ? `${WORKFLOW_URL}?${queryString}` : WORKFLOW_URL;
+
         const response = await fetch(
-            `${WORKFLOW_URL}?${req.nextUrl.searchParams.toString() ?? ""}`,
+            url,
             {
                 credentials: "include",
-                headers: {
-                    'Origin': req.headers.get("origin") ?? origin,
-                    Cookie: cookieHeader!,
-                }
+                headers: headers,
             }
         );
 
@@ -56,18 +56,18 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const cookieHeader = token.cookies;
 
     try {
+        const headers = getCommonHeaders(req, cookieHeader!);
+        headers.set('Content-Type', 'application/json');
+
         const data = await req.json();
+
         const response = await fetch(
             `${WORKFLOW_URL}`,
             {
                 method: "POST",
                 body: JSON.stringify(data),
                 credentials: "include",
-                headers: {
-                    'Origin': req.headers.get("origin") ?? origin,
-                    Cookie: cookieHeader!,
-                    'Content-Type': 'application/json'
-                }
+                headers: headers,
             }
         );
 

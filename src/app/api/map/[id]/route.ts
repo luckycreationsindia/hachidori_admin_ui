@@ -3,9 +3,8 @@ import {ApiErrorResponse} from "@/interfaces/api_response";
 import {getToken} from "next-auth/jwt";
 import {MAP_URL} from "@/utils/api_consts";
 import {MapResponse} from "@/interfaces/waypoint";
-import {commonErrorResponse} from "@/utils/utils";
+import {commonErrorResponse, getCommonHeaders} from "@/utils/utils";
 
-const origin = process.env.NEXTAUTH_URL!;
 const serverError: ApiErrorResponse = {status: -1, message: "Server Error"}
 
 type Context = {
@@ -25,15 +24,13 @@ export async function GET(req: NextRequest, context: Context): Promise<NextRespo
     const cookieHeader = token.cookies;
 
     try {
+        const headers = getCommonHeaders(req, cookieHeader!);
         const {id} = await context.params;
         const response = await fetch(
             `${MAP_URL}/${id}`,
             {
                 credentials: "include",
-                headers: {
-                    'Origin': req.headers.get("origin") ?? origin,
-                    Cookie: cookieHeader!,
-                }
+                headers: headers,
             }
         );
 
