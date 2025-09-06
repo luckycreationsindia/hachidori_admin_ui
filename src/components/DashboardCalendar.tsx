@@ -10,22 +10,29 @@ import {
     endOfWeek,
     isSameMonth,
     isSameDay,
-    parseISO
+    addMonths
 } from "date-fns";
 import {Card, CardContent} from "@/components/ui/card";
 import {cn} from "@/lib/utils";
-import {CalendarEvent} from "@/interfaces/calendar";
+import {Schedule} from "@/interfaces/schedule";
 import {Dialog, DialogContent, DialogHeader, DialogTitle} from "@/components/ui/dialog";
 
 interface CalendarProps {
-    events: CalendarEvent[];
-    handleEventClick: (event: CalendarEvent) => void;
+    events: Schedule[];
+    handleEventClick: (event: Schedule) => void;
+    onMonthChange: (newMonth: Date) => void;
 }
 
-export default function DashboardCalendar({events, handleEventClick}: CalendarProps) {
-    const [currentMonth, setCurrentMonth] = useState(new Date());
+export default function DashboardCalendar({events, handleEventClick, onMonthChange}: CalendarProps) {
     const [isSelectedDayDialogOpen, setIsSelectedDayDialogOpen] = useState(false);
-    const [selectedDayEvents, setSelectedDayEvents] = useState<CalendarEvent[]>([]);
+    const [selectedDayEvents, setSelectedDayEvents] = useState<Schedule[]>([]);
+    const [currentMonth, setCurrentMonth] = useState(new Date());
+
+    const changeMonth = (offset: number) => {
+        const newMonth = addMonths(currentMonth, offset);
+        setCurrentMonth(newMonth);
+        onMonthChange(newMonth);
+    };
 
     const monthStart = startOfMonth(currentMonth);
     const monthEnd = endOfMonth(monthStart);
@@ -39,16 +46,16 @@ export default function DashboardCalendar({events, handleEventClick}: CalendarPr
     while (day <= endDate) {
         for (let i = 0; i < 7; i++) {
             const dayEvents = events.filter((e) =>
-                isSameDay(parseISO(e.date), day)
+                isSameDay(e.startDate, day)
             );
 
             days.push(
                 <div
                     key={day.toString()}
                     className={cn(
-                        "h-18 lg:h-28 border p-1 flex flex-col rounded-lg transition-colors hover:bg-gray-50",
-                        !isSameMonth(day, monthStart) ? "bg-gray-50 text-gray-400" : "bg-white",
-                        isSameDay(day, new Date()) ? "border-blue-500" : "border-gray-200",
+                        "h-18 lg:h-28 border p-1 flex flex-col rounded-lg transition-colors hover:bg-accent",
+                        !isSameMonth(day, monthStart) ? "bg-accent text-accent-foreground opacity-50 cursor-not-allowed" : "",
+                        isSameDay(day, new Date()) ? "border-accent-foreground" : "border-accent",
                     )}
                     onClick={(e) => {
                         e.stopPropagation();
@@ -59,7 +66,7 @@ export default function DashboardCalendar({events, handleEventClick}: CalendarPr
                     <div className="text-xs font-medium mb-1">{format(day, "d")}</div>
                     <div className="flex flex-col gap-1 overflow-hidden">
                         {dayEvents
-                            .sort((a, b) => parseISO(a.date).getTime() - parseISO(b.date).getTime())
+                            .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
                             .slice(0, 2).map((event, idx) => (
                             <span
                                 key={event.id}
@@ -69,19 +76,18 @@ export default function DashboardCalendar({events, handleEventClick}: CalendarPr
                                 }}
                                 className={cn(
                                     "text-xs truncate rounded px-1 py-0.5 hover:cursor-pointer",
-                                    event.color || "bg-blue-100 text-blue-700",
-                                    idx > 0 ? "hidden lg:inline" : "",
-                                    idx > 1 ? "hidden xl:inline" : ""
+                                    "bg-blue-100 text-blue-700",
+                                    idx > 0 ? "hidden lg:inline" : ""
                                 )}
                             >
                 {event.title}
               </span>
                         ))}
                         {dayEvents.length > 1 && (
-                            <span className="text-[10px] text-gray-500 lg:hidden">+{dayEvents.length - 1} more</span>
+                            <span className="text-[10px] text-accent-foreground lg:hidden">+{dayEvents.length - 1} more</span>
                         )}
                         {dayEvents.length > 2 && (
-                            <span className="hidden lg:inline text-[10px] text-gray-500">+{dayEvents.length - 2} more</span>
+                            <span className="hidden lg:inline text-[10px] text-accent-foreground">+{dayEvents.length - 2} more</span>
                         )}
                     </div>
                 </div>
@@ -101,10 +107,10 @@ export default function DashboardCalendar({events, handleEventClick}: CalendarPr
             <Card className="w-full shadow-none border-none">
                 <CardContent className="p-4">
                     <div className="flex justify-between items-center mb-4">
-                        <button onClick={() => setCurrentMonth(addDays(currentMonth, -30))} className="text-sm">← Prev
+                        <button onClick={() => changeMonth(-1)} className="text-sm">← Prev
                         </button>
                         <h2 className="text-lg font-semibold">{format(currentMonth, "MMMM yyyy")}</h2>
-                        <button onClick={() => setCurrentMonth(addDays(currentMonth, 30))} className="text-sm">Next →
+                        <button onClick={() => changeMonth(1)} className="text-sm">Next →
                         </button>
                     </div>
                     <div className="grid grid-cols-7 text-xs font-medium text-gray-500 mb-2">
@@ -120,14 +126,14 @@ export default function DashboardCalendar({events, handleEventClick}: CalendarPr
                     <DialogContent className="sm:max-w-[425px]">
                         <DialogHeader>
                             <DialogTitle>
-                                <span className="text-lg font-semibold">Events for {format(parseISO(selectedDayEvents[0].date), 'dd-MM-yyyy')}</span>
+                                <span className="text-lg font-semibold">Events for {format(selectedDayEvents[0].startDate, 'dd-MM-yyyy')}</span>
                             </DialogTitle>
                         </DialogHeader>
                         <div className="flex flex-col gap-2">
                             <div className="flex flex-col gap-1">
                                 {selectedDayEvents.map((event) => (
                                     <div key={event.id}
-                                         className="flex items-center gap-2 p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors hover:cursor-pointer"
+                                         className="flex items-center gap-2 p-2 rounded-lg border border-accent hover:border-accent-foreground transition-colors hover:cursor-pointer"
                                          onClick={(e) => {
                                              e.stopPropagation();
                                              handleEventClick(event);
@@ -135,12 +141,12 @@ export default function DashboardCalendar({events, handleEventClick}: CalendarPr
                                         <span
                                             className={cn(
                                                 "h-2 w-2 rounded-full",
-                                                event.color || "bg-blue-500"
+                                                "bg-blue-500"
                                             )}
                                         />
                                         <div className="flex-1">
                                             <div className="text-sm font-medium">{event.title}</div>
-                                            <div className="text-xs text-gray-500">{event.date}</div>
+                                            <div className="text-xs text-gray-500">{format(event.startDate, 'dd-MM-yyyy hh:mm a')}</div>
                                         </div>
                                     </div>
                                 ))}
