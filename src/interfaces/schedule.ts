@@ -14,6 +14,7 @@ export type Schedule = {
     workflow: Schedule | null;
     createdAt: Date;
     updatedAt: Date;
+    color?: string;
 };
 
 export const createScheduleSchema = z.object({
@@ -33,4 +34,25 @@ export interface ScheduleResponse extends ApiSuccessResponse {
 
 export interface ScheduleListResponse extends ApiSuccessResponse {
     data: Schedule[];
+}
+
+export type ScheduleDTO = Omit<Schedule, "startDate" | "endDate" | "createdAt" | "updatedAt"> & {
+    startDate: string;
+    endDate: string;
+    createdAt: string;
+    updatedAt: string;
+};
+
+export function deserializeSchedule(raw: ScheduleDTO): Schedule {
+    return {
+        ...raw,
+        startDate: new Date(raw.startDate),
+        endDate: new Date(raw.endDate),
+        createdAt: new Date(raw.createdAt),
+        updatedAt: new Date(raw.updatedAt),
+    };
+}
+
+export function deserializeSchedules(raw: ScheduleDTO[]): Schedule[] {
+    return raw.map(deserializeSchedule);
 }
