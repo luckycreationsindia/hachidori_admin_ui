@@ -74,3 +74,12 @@ export const commonErrorResponse = async (response: Response): Promise<NextRespo
     }
     return null;
 }
+
+const fallbackOrigin = process.env.NEXTAUTH_URL!;
+export const getCommonHeaders = (req: NextRequest, cookieHeader: string): Headers => {
+    const headers = new Headers(req.headers);
+    headers.set("Origin", req.headers.get("origin") ?? fallbackOrigin);
+    headers.set("Cookie", cookieHeader!);
+
+    return headers;
+}
