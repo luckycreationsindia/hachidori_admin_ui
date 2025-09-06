@@ -223,7 +223,7 @@ const App: React.FC = () => {
         try {
             const waypoints: string = selectedNodes.map((node: NodeDetail) => node.Node_ID.toString().padStart(4, '0')).join('');
             const newJobId: string = `JD${selectedWorkflowId}S${selectedNodes.length}S${waypoints}`;
-            const data = {name, description, data: newJobId}
+            const data = {title: name, description, data: newJobId}
 
             const response = await fetch('/api/workflow', {
                 method: 'POST',
